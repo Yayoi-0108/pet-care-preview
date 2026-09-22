@@ -1,25 +1,29 @@
 <!doctype html>
 <html lang="ja">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pet Care 試作版</title>
-<style>*{box-sizing:border-box}body{margin:0;background:#faf6f2;color:#50494a;font-family:-apple-system,'Hiragino Sans',sans-serif}.app{max-width:430px;margin:auto;min-height:100vh;background:#fffdfa;padding:20px 18px 90px}header{display:flex;justify-content:space-between;align-items:center}h1{font-size:21px;margin:5px 0 20px}h2{font-size:16px;margin:8px 0 13px}.card{background:white;border:1px solid #f0e4e4;border-radius:19px;padding:16px;margin:12px 0;box-shadow:0 3px 9px #f6eeee}.pet{display:flex;gap:15px;align-items:center;background:#fff1f3}.face{font-size:48px}.muted,small{color:#978b90;font-size:11px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.tile{border:1px solid #f5e6e8;background:#fff9fa;border-radius:15px;padding:13px 4px;font-size:24px;cursor:pointer}.tile span{display:block;font-size:11px;margin-top:5px}.tile.done{background:#e9f7ed;border-color:#c8e5ce}.pink{width:100%;border:0;border-radius:24px;background:#f5a3b5;color:white;padding:12px;font-weight:bold;margin-top:9px}.line{padding:12px 3px;border-bottom:1px solid #f3ebed;font-size:13px}.line:last-child{border:0}nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:430px;width:100%;background:white;border-top:1px solid #f1e5e8;display:flex;justify-content:space-around;padding:11px 0}nav button{border:0;background:none;color:#b87f90;font-size:12px}input,select,textarea{width:100%;padding:12px;border:1px solid #eadcde;border-radius:12px;margin:7px 0;font:inherit}label{display:block;font-size:13px;margin-top:12px}.secondary{background:#fff1f3;color:#9b5870}.progress{font-weight:bold;font-size:18px;color:#b65b79}.check{display:flex;gap:9px;align-items:center}.check input{width:auto}</style>
-</head><body><div class="app"><header><h1>🐾 Pet Care</h1><span>⚙️</span></header><main id="main"><p>画面を準備しています…</p></main><nav><button data-page="home">🏠 ホーム</button><button data-page="records">📝 記録</button><button data-page="schedule">📅 予定</button><button data-page="settings">⚙️ 設定</button><button data-page="family">👨‍👩‍👧 家族</button></nav></div>
-<script>
-'use strict';
-const key='pet-care-demo-v1';let state={done:[],records:[],events:[],mealGoal:2,showSnacks:true};
-try{const old=JSON.parse(localStorage.getItem(key)||'null');if(old&&typeof old==='object'){const n=Number(old.mealGoal);state={done:Array.isArray(old.done)?old.done:[],records:Array.isArray(old.records)?old.records:[],events:Array.isArray(old.events)?old.events:[],mealGoal:Number.isInteger(n)&&n>=1&&n<=12?n:2,showSnacks:typeof old.showSnacks==='boolean'?old.showSnacks:true};}}catch(error){console.warn('試作データを読み込めませんでした',error);}
-const main=document.getElementById('main');const pet='<div class="card pet"><div class="face">🐶</div><div><b>ポチ ♡</b><p class="muted">3歳・男の子（表示例）</p></div></div>';
-function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch(error){alert('このブラウザでは保存できません。設定を確認してください。');}}
-function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function localDay(date){const d=new Date(date);if(Number.isNaN(d.getTime()))return '';return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function mealCount(){const today=localDay(new Date());return state.records.filter(r=>r.kind==='ごはん'&&localDay(r.timestamp||r.date)===today).length;}
-function eventLines(){return state.events.length?state.events.map(e=>`<div class="line">${escapeHtml(e.kind)}：${escapeHtml(e.date)}<br><small>${escapeHtml(e.note)}</small></div>`).join(''):'<p class="muted">予定はまだありません</p>';}
-function recordLines(){const records=state.records.filter(r=>state.showSnacks||r.kind!=='おやつ');return records.map(r=>`<div class="line">${escapeHtml(r.kind)}：${escapeHtml(r.note)}<br><small>${escapeHtml(r.date)}・あなた</small></div>`).join('')||'<p class="muted">まだ記録はありません</p>';}
-function page(name){let html='';if(name==='home'){const care=[['🐾','散歩'],['💊','お薬'],['💩','うんち'],['🤢','嘔吐'],['⚖️','体重']];html=pet+`<div class="card"><h2>🍚 今日のごはん</h2><p class="progress">${mealCount()}/${state.mealGoal}回</p><button class="pink" data-page="meal">ごはんを記録する</button>${state.showSnacks?'<button class="pink secondary" data-page="snack">おやつを記録する</button>':''}</div>`+'<div class="card"><h2>🐾 今日のお世話</h2><div class="grid">'+care.map(([emoji,label])=>`<button class="tile ${state.done.includes(label)?'done':''}" data-care="${label}">${emoji}<span>${label} ${state.done.includes(label)?'✓':''}</span></button>`).join('')+'</div></div>'+'<div class="card"><h2>📅 次の予定</h2>'+eventLines()+'<button class="pink" data-page="schedule">予定を見る</button></div>'+'<div class="card"><h2>💗 健康情報</h2><div class="line">💉 予防接種</div><div class="line">✂️ トリミング</div><div class="line">🩺 病気の既往歴</div><div class="line">🏥 手術歴</div><button class="pink" data-page="health">健康情報を見る</button></div>';}else if(name==='meal'||name==='snack'){if(name==='snack'&&!state.showSnacks){page('home');return;}const kind=name==='meal'?'ごはん':'おやつ';html=pet+`<div class="card"><h2>🍚 ${kind}記録</h2>${name==='meal'?`<p class="progress">今日 ${mealCount()}/${state.mealGoal}回</p>`:''}<label for="mealNote">内容・量（任意）</label><textarea id="mealNote" placeholder="食べたものや量を入力"></textarea><button class="pink" data-action="meal" data-kind="${kind}">記録する</button><button class="pink secondary" data-page="records">記録一覧へ</button></div>`;}else if(name==='records'){html=pet+'<div class="card"><h2>記録を追加</h2><button class="pink" data-page="meal">🍚 ごはん記録（ここに統一）</button>'+(state.showSnacks?'<button class="pink secondary" data-page="snack">おやつ記録</button>':'')+'<label for="kind">その他の記録</label><select id="kind"><option>散歩</option><option>お薬</option><option>うんち</option><option>嘔吐</option><option>体重</option><option>メモ</option></select><textarea id="note" placeholder="内容や体重などを入力"></textarea><button class="pink" data-action="record">保存する</button></div>'+'<div class="card"><h2>最近の記録</h2>'+recordLines()+'</div>';}else if(name==='settings'){html=pet+`<div class="card"><h2>⚙️ ごはん・おやつ設定</h2><p class="muted">現在は表示例のポチに対する設定です。複数ペットごとの設定は今後対応します。</p><label for="mealGoal">1日のごはんの回数（1〜12回）</label><input id="mealGoal" type="number" min="1" max="12" step="1" value="${state.mealGoal}"><label class="check" for="showSnacks"><input id="showSnacks" type="checkbox" ${state.showSnacks?'checked':''}> おやつの項目を表示する</label><button class="pink" data-action="settings">設定を保存</button><p class="muted">非表示にしても過去のおやつ記録は削除されません。</p></div>`;}else if(name==='schedule'){html='<h2>📅 予定</h2><div class="card"><select id="eventKind"><option>予防接種</option><option>トリミング</option><option>健診</option><option>お薬</option><option>その他</option></select><input id="eventDate" type="date"><input id="eventNote" placeholder="予定の内容"><button class="pink" data-action="event">予定を保存する</button><p class="muted">※通知は未実装です。端末にお知らせは届きません。</p></div><div class="card">'+eventLines()+'</div>';}else if(name==='health'){html=pet+'<h2>💗 健康情報</h2>'+['予防接種','トリミング','病気の既往歴','手術歴'].map(label=>`<div class="card"><h2>${label}</h2><p class="muted">詳細入力はまだできません。</p></div>`).join('');}else if(name==='family'){html=pet+'<div class="card"><h2>👨‍👩‍👧 家族共有</h2><p class="muted">家族メンバーの表示例です。</p><p>ママ・パパ・お姉ちゃん（サンプル）</p><button class="pink" data-action="invite">＋ 家族を招待する（未実装）</button><p class="muted">※招待・複数端末での同期はできません。</p></div>';}main.innerHTML=html;}
-function toggle(label){state.done=state.done.includes(label)?state.done.filter(item=>item!==label):[...state.done,label];save();page('home');}
-function addRecord(){const now=new Date();state.records.unshift({kind:document.getElementById('kind').value,note:document.getElementById('note').value,date:now.toLocaleString('ja-JP'),timestamp:now.toISOString()});save();page('records');}
-function addMeal(kind){if(kind==='おやつ'&&!state.showSnacks)return;const now=new Date();state.records.unshift({kind,note:document.getElementById('mealNote').value,date:now.toLocaleString('ja-JP'),timestamp:now.toISOString()});save();page('home');}
-function saveSettings(){const goal=Number(document.getElementById('mealGoal').value);if(!Number.isInteger(goal)||goal<1||goal>12){alert('回数は1〜12の整数で入力してください');return;}state.mealGoal=goal;state.showSnacks=document.getElementById('showSnacks').checked;save();page('home');}
-function addEvent(){const date=document.getElementById('eventDate').value;if(!date){alert('日付を選んでね');return;}state.events.push({kind:document.getElementById('eventKind').value,date,note:document.getElementById('eventNote').value});save();page('schedule');}
-document.addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;if(button.dataset.page)page(button.dataset.page);else if(button.dataset.care)toggle(button.dataset.care);else if(button.dataset.action==='record')addRecord();else if(button.dataset.action==='meal')addMeal(button.dataset.kind);else if(button.dataset.action==='settings')saveSettings();else if(button.dataset.action==='event')addEvent();else if(button.dataset.action==='invite')alert('招待・複数端末での共有は未実装です。');});
-page('home');
-</script></body></html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fff8f9">
+  <title>Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <button id="back" class="head-action" hidden>‹ 戻る</button>
+      <h1 id="title">ホーム</h1>
+      <button class="head-action" data-page="pets">ペット切替</button>
+    </header>
+    <main id="main"><p class="empty">画面を準備しています…</p></main>
+    <nav>
+      <button data-page="home"><span>⌂</span>ホーム</button>
+      <button data-page="records"><span>▣</span>記録</button>
+      <button data-page="schedule"><span>□</span>予定</button>
+      <button data-page="health"><span>♥</span>健康</button>
+      <button data-page="settings"><span>•••</span>その他</button>
+    </nav>
+  </div>
+  <input id="importFile" type="file" accept="application/json" hidden>
+  <script src="app.js"></script>
+</body>
+</html>
