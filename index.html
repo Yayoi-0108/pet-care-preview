@@ -24,7 +24,17 @@
     </nav>
   </div>
   <input id="importFile" type="file" accept="application/json" hidden>
-  <script src="app.js"></script>
-  <script src="meal-home-fix.js"></script>
+  <script>
+    // Handle the home meal row before the generic one-time care toggle.
+    // Does not modify localStorage, prior records, or meal goals.
+    document.addEventListener('click', function(event) {
+      const button = event.target instanceof Element ? event.target.closest('button[data-care="ごはん"]') : null;
+      if (!button) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      navigate('meal');
+    }, true);
+  </script>
+  <script src="app.js?v=meal-repeat-20260922b"></script>
 </body>
 </html>
