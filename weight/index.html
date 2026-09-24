@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fff8fb">
+<title>体重管理</title>
+<style>
+:root{--pink:#ff5f8d;--soft:#fff1f6;--text:#253047;--muted:#7b8599;--line:#eceef3}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#fff8fb;color:var(--text)}
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:#fff;padding-bottom:84px}
+header{text-align:center;font-size:22px;font-weight:800;padding:20px 16px 14px;border-bottom:1px solid #f2f2f5}
+main{padding:18px}.card{background:var(--soft);border-radius:20px;padding:18px;margin-bottom:18px}
+.label{font-size:14px;color:var(--muted);font-weight:700}.goal{font-size:36px;font-weight:800;margin-top:6px}
+.center{text-align:center;padding:24px 0}.date{font-size:14px;color:var(--muted)}.big{font-size:64px;font-weight:800;margin:15px 0}
+.controls{display:flex;justify-content:center;align-items:center;gap:28px}.circle{width:74px;height:74px;border:0;border-radius:50%;background:#ffdce7;color:var(--pink);font-size:42px;touch-action:manipulation}
+.hint{font-size:13px;color:var(--muted);line-height:1.5}.delta{text-align:center}.delta b{font-size:28px;color:var(--pink)}
+.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+.nav{border:0;background:none;color:#7c8598;font-size:12px;padding:7px 2px}.nav.active{color:var(--pink);font-weight:800}.nav span{display:block;font-size:22px}.hidden{display:none}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}.tab{border:0;border-radius:12px;padding:11px;background:#f1f3f7;color:#68748c;font-weight:700}.tab.active{background:var(--pink);color:#fff}
+svg{width:100%;height:280px;background:#fff;border:1px solid var(--line);border-radius:18px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.edit{border:0;background:none;color:var(--pink);font-size:22px}
+.title{font-size:22px;font-weight:800;margin:4px 0 14px}.setting{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}
+.smallbtn{width:40px;height:40px;border:0;border-radius:50%;background:#ffdce7;color:var(--pink);font-size:24px}
+input{width:110px;font-size:22px;text-align:center;padding:9px;border:1px solid #ddd;border-radius:12px}
+.save,.danger{width:100%;padding:14px;border-radius:12px;font-size:16px;font-weight:800;margin-top:12px}.save{border:0;background:var(--pink);color:#fff}.danger{background:#fff;color:#ec3c66;border:1px solid #ec3c66}
+</style>
+</head>
+<body>
+<div class="app">
+<header id="head">体重管理</header>
+<main>
+<section id="home">
+<div class="card"><div class="label">目標体重</div><div class="goal"><span id="goalHome">58.0</span> kg</div></div>
+<div class="center">
+<div class="date" id="dateText"></div>
+<div class="big"><span id="weightHome">62.4</span><span style="font-size:24px"> kg</span></div>
+<div class="controls">
+<button class="circle" id="minus">−</button>
+<div class="hint">0.1kgずつ変更<br><span id="saved">変更すると自動保存</span></div>
+<button class="circle" id="plus">＋</button>
+</div>
+</div>
+<div class="card delta"><div class="label">目標まで</div><b id="delta"></b></div>
+</section>
+
+<section id="graph" class="hidden">
+<div class="tabs"><button class="tab active" data-days="7">1週間</button><button class="tab" data-days="30">1か月</button><button class="tab" data-days="365">1年</button></div>
+<svg id="chart" viewBox="0 0 360 260"></svg>
+</section>
+
+<section id="history" class="hidden"><div class="title">過去の記録</div><div class="card" id="historyList"></div></section>
+
+<section id="settings" class="hidden">
+<div class="title">設定</div>
+<div class="card"><div class="setting"><span>目標体重</span><div><button class="smallbtn" id="gminus">−</button><strong style="margin:0 10px"><span id="goalSetting">58.0</span> kg</strong><button class="smallbtn" id="gplus">＋</button></div></div></div>
+</section>
+
+<section id="editPage" class="hidden">
+<div class="title">体重の編集</div>
+<div class="card"><div class="date" id="editDate"></div><div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:22px 0"><button class="smallbtn" id="eminus">−</button><input id="editWeight" type="number" step="0.1"><button class="smallbtn" id="eplus">＋</button></div><button class="save" id="saveEdit">保存</button><button class="danger" id="deleteEdit">この記録を削除</button></div>
+</section>
+</main>
+
+<nav class="bottom">
+<button class="nav active" data-page="home"><span>⌂</span>ホーム</button>
+<button class="nav" data-page="graph"><span>▥</span>グラフ</button>
+<button class="nav" data-page="history"><span>▤</span>記録</button>
+<button class="nav" data-page="settings"><span>⚙︎</span>設定</button>
+</nav>
+</div>
+<script>
+(()=>{const $=x=>document.getElementById(x),KEY='weightAppLive1';const today=new Date();today.setHours(0,0,0,0);const pad=n=>String(n).padStart(2,'0'),key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),todayKey=key(today);
+function seed(){const r={},v=[63.4,63.0,62.8,62.6,62.3,62.1,62.4];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);r[key(d)]=v[6-i]}return{goal:58,records:r}}
+let data;try{data=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){data=seed()}if(data.records[todayKey]==null)data.records[todayKey]=62.4;let days=7,editing=null;
+const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+const w=()=>Number(data.records[todayKey]);
+function home(){weightHome.textContent=w().toFixed(1);goalHome.textContent=Number(data.goal).toFixed(1);goalSetting.textContent=Number(data.goal).toFixed(1);dateText.textContent=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';const d=w()-data.goal;delta.textContent=d>0?'あと '+d.toFixed(1)+' kg':d<0?'目標より '+Math.abs(d).toFixed(1)+' kg 少ない':'目標達成'}
+function change(step){data.records[todayKey]=Math.round((w()+step)*10)/10;persist();home();hist();draw();saved.textContent='保存しました';setTimeout(()=>saved.textContent='変更すると自動保存',700)}
+function page(p){['home','graph','history','settings','editPage'].forEach(id=>$(id).classList.toggle('hidden',id!==p));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===p));head.textContent=p==='graph'?'グラフ':p==='history'?'記録':p==='settings'?'設定':p==='editPage'?'体重の編集':'体重管理';if(p==='graph')draw();if(p==='history')hist()}
+function hist(){const ks=Object.keys(data.records).sort().reverse();historyList.innerHTML=ks.map(k=>{const d=new Date(k+'T00:00:00');return '<div class="row"><span>'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日</span><span><strong>'+Number(data.records[k]).toFixed(1)+' kg</strong> <button class="edit" data-k="'+k+'">›</button></span></div>'}).join('');document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openEdit(b.dataset.k))}
+function openEdit(k){editing=k;const d=new Date(k+'T00:00:00');editDate.textContent=d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';editWeight.value=Number(data.records[k]).toFixed(1);page('editPage')}
+function draw(){const cutoff=new Date(today);cutoff.setDate(cutoff.getDate()-(days-1));const pts=Object.entries(data.records).map(([k,v])=>({d:new Date(k+'T00:00:00'),v:Number(v)})).filter(p=>p.d>=cutoff).sort((a,b)=>a.d-b.d);if(!pts.length){chart.innerHTML='<text x="180" y="130" text-anchor="middle">記録がありません</text>';return}const W=360,H=260,L=42,R=16,T=20,B=36,vals=pts.map(p=>p.v).concat([Number(data.goal)]);let mn=Math.floor(Math.min(...vals)-1),mx=Math.ceil(Math.max(...vals)+1);if(mx-mn<4)mx=mn+4;const x=i=>L+(W-L-R)*(pts.length===1?.5:i/(pts.length-1)),y=v=>T+(H-T-B)*(mx-v)/(mx-mn);let s='';for(let n=mn;n<=mx;n++){const yy=y(n);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="#eef1f5"/><text x="'+(L-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="#8892a5">'+n+'</text>'}const gy=y(Number(data.goal));s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy+'" y2="'+gy+'" stroke="#ff5f8d" stroke-dasharray="6 5"/>';s+='<path d="'+pts.map((p,i)=>(i?'L':'M')+' '+x(i)+' '+y(p.v)).join(' ')+'" fill="none" stroke="#ff6b94" stroke-width="3"/>';pts.forEach((p,i)=>s+='<circle cx="'+x(i)+'" cy="'+y(p.v)+'" r="4" fill="#ff6b94"/>');chart.innerHTML=s}
+minus.onclick=()=>change(-.1);plus.onclick=()=>change(.1);gminus.onclick=()=>{data.goal=Math.round((data.goal-.1)*10)/10;persist();home();draw()};gplus.onclick=()=>{data.goal=Math.round((data.goal+.1)*10)/10;persist();home();draw()};eminus.onclick=()=>editWeight.value=(Math.round((Number(editWeight.value)-.1)*10)/10).toFixed(1);eplus.onclick=()=>editWeight.value=(Math.round((Number(editWeight.value)+.1)*10)/10).toFixed(1);saveEdit.onclick=()=>{if(!editing)return;data.records[editing]=Math.round(Number(editWeight.value)*10)/10;persist();home();page('history')};deleteEdit.onclick=()=>{if(editing&&confirm('この記録を削除しますか？')){delete data.records[editing];if(editing===todayKey)data.records[todayKey]=62.4;persist();home();page('history')}};document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>page(b.dataset.page));document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{days=Number(b.dataset.days);document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));draw()});persist();home();hist();draw()})();
+</script>
+</body>
+</html>
