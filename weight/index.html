@@ -2,19 +2,19 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#fff8fb">
 <title>体重管理</title>
 <style>
 :root{--pink:#ff5f8d;--soft:#fff1f6;--text:#253047;--muted:#7b8599;--line:#eceef3}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#fff8fb;color:var(--text)}
-.app{max-width:520px;margin:0 auto;min-height:100vh;background:#fff;padding-bottom:84px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{overscroll-behavior:none}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#fff8fb;color:var(--text);touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.app{max-width:520px;margin:0 auto;height:100dvh;min-height:100vh;overflow:hidden;background:#fff;padding-bottom:84px}
 header{text-align:center;font-size:22px;font-weight:800;padding:20px 16px 14px;border-bottom:1px solid #f2f2f5}
-main{padding:18px}.card{background:var(--soft);border-radius:20px;padding:18px;margin-bottom:18px}
+main{padding:18px;height:calc(100dvh - 70px - 84px);overflow:auto;-webkit-overflow-scrolling:touch}.card{background:var(--soft);border-radius:20px;padding:18px;margin-bottom:18px}
 .label{font-size:14px;color:var(--muted);font-weight:700}.goal{font-size:36px;font-weight:800;margin-top:6px}
-.center{text-align:center;padding:24px 0}.date{font-size:14px;color:var(--muted)}.big{font-size:64px;font-weight:800;margin:15px 0}
-.controls{display:flex;justify-content:center;align-items:center;gap:28px}.circle{width:74px;height:74px;border:0;border-radius:50%;background:#ffdce7;color:var(--pink);font-size:42px;touch-action:manipulation}
+.center{text-align:center;padding:24px 0}.date{font-size:14px;color:var(--muted)}.big{font-size:64px;font-weight:800;margin:15px 0;font-variant-numeric:tabular-nums;min-height:77px;display:flex;justify-content:center;align-items:baseline;gap:2px}
+.controls{display:flex;justify-content:center;align-items:center;gap:28px}.circle{width:74px;height:74px;flex:0 0 74px;border:0;border-radius:50%;background:#ffdce7;color:var(--pink);font-size:42px;touch-action:manipulation;-webkit-user-select:none;user-select:none}.circle:active{transform:none}
 .hint{font-size:13px;color:var(--muted);line-height:1.5}.delta{text-align:center}.delta b{font-size:28px;color:var(--pink)}
 .bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
 .nav{border:0;background:none;color:#7c8598;font-size:12px;padding:7px 2px}.nav.active{color:var(--pink);font-weight:800}.nav span{display:block;font-size:22px}.hidden{display:none}
