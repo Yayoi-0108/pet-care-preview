@@ -4,92 +4,127 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#fff8fb">
+<meta name="theme-color" content="#fff7fa">
 <title>体重管理</title>
 <style>
-:root{--pink:#ff5f8d;--soft:#fff1f6;--text:#253047;--muted:#7b8599;--line:#eceef3}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{overscroll-behavior:none}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#fff8fb;color:var(--text);touch-action:manipulation;-webkit-user-select:none;user-select:none}
-.app{position:fixed;inset:0;width:100%;max-width:520px;margin:0 auto;height:100dvh;overflow:hidden;background:#fff}
-header{position:absolute;top:0;left:0;right:0;height:64px;text-align:center;font-size:22px;font-weight:800;padding:20px 16px 14px;border-bottom:1px solid #f2f2f5;background:#fff;z-index:2}
-main{position:absolute;top:64px;bottom:72px;left:0;right:0;padding:18px;overflow:hidden}.card{background:var(--soft);border-radius:20px;padding:18px;margin-bottom:18px}
-.label{font-size:14px;color:var(--muted);font-weight:700}.goal{font-size:36px;font-weight:800;margin-top:6px}
-.center{text-align:center;padding:24px 0}.date{font-size:14px;color:var(--muted)}.big{font-size:64px;font-weight:800;margin:15px 0;font-variant-numeric:tabular-nums;min-height:77px;display:flex;justify-content:center;align-items:baseline;gap:2px}
-.controls{display:flex;justify-content:center;align-items:center;gap:28px}.circle{width:74px;height:74px;flex:0 0 74px;border:0;border-radius:50%;background:#ffdce7;color:var(--pink);font-size:42px;touch-action:manipulation;-webkit-user-select:none;user-select:none}.circle:active{transform:none}
-.hint{font-size:13px;color:var(--muted);line-height:1.5;min-width:110px;text-align:center}.delta{text-align:center}.delta b{font-size:28px;color:var(--pink)}
-.bmi{text-align:center}.bmi-value{font-size:34px;font-weight:800;margin:6px 0}.bmi-rating{display:inline-block;border-radius:999px;background:#ffdce7;color:#e54878;font-size:14px;font-weight:800;padding:6px 14px}.bmi-note{font-size:12px;color:var(--muted);margin-top:6px}
-.bottom{position:absolute;left:0;right:0;bottom:0;width:100%;height:72px;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:2}
-.nav{border:0;background:none;color:#7c8598;font-size:12px;padding:7px 2px;touch-action:manipulation}.nav.active{color:var(--pink);font-weight:800}.nav span{display:block;font-size:22px}.hidden{display:none}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}.tab{border:0;border-radius:12px;padding:11px;background:#f1f3f7;color:#68748c;font-weight:700}.tab.active{background:var(--pink);color:#fff}
-svg{width:100%;height:280px;background:#fff;border:1px solid var(--line);border-radius:18px}
-.row{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.edit{border:0;background:none;color:var(--pink);font-size:22px}
-.title{font-size:22px;font-weight:800;margin:4px 0 14px}#graph,#history,#settings,#editPage{height:100%;overflow:auto;-webkit-overflow-scrolling:touch}#home{height:100%;overflow:auto;-webkit-overflow-scrolling:touch}.setting{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}
-.smallbtn{width:40px;height:40px;border:0;border-radius:50%;background:#ffdce7;color:var(--pink);font-size:24px}
-input{width:110px;font-size:22px;text-align:center;padding:9px;border:1px solid #ddd;border-radius:12px}
-.save,.danger{width:100%;padding:14px;border-radius:12px;font-size:16px;font-weight:800;margin-top:12px}.save{border:0;background:var(--pink);color:#fff}.danger{background:#fff;color:#ec3c66;border:1px solid #ec3c66}
+:root{--pink:#d84776;--pink2:#ea789b;--pink3:#ffdce7;--soft:#fff4f7;--text:#413846;--muted:#877985;--line:#f0e4e8;--green:#35b98b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:#fff6f9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--text);touch-action:manipulation}
+body{overflow:hidden}.app{position:fixed;inset:0;max-width:520px;margin:auto;background:linear-gradient(180deg,#fff9fb 0%,#fff2f6 100%);overflow:hidden}
+header{height:72px;display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:800;color:#c94e74;letter-spacing:.04em;position:relative;background:rgba(255,255,255,.74);backdrop-filter:blur(12px);z-index:3}header:after{content:"";position:absolute;bottom:8px;width:34px;height:4px;border-radius:4px;background:#ee86a6}
+main{position:absolute;top:72px;bottom:74px;left:0;right:0;padding:14px 18px 26px;overflow:auto;-webkit-overflow-scrolling:touch}
+.hidden{display:none!important}.screen{min-height:100%}
+.card{background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);box-shadow:0 10px 28px rgba(199,75,112,.10);border-radius:28px}
+.weight-card{padding:20px 18px 24px;text-align:center}.eyebrow{font-size:17px;font-weight:700;color:#554a56}.weight{font-size:64px;line-height:1;font-weight:800;color:#cf3f6e;margin-top:14px;font-variant-numeric:tabular-nums}.weight small{font-size:25px;color:#514650;margin-left:5px}
+.adjust{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.adjust button{height:86px;border:0;border-radius:27px;font-size:47px;color:white;font-weight:300;background:linear-gradient(135deg,#f7b7ca,#ec8eaa);box-shadow:0 10px 22px rgba(216,71,118,.16);touch-action:manipulation}.adjust button:last-child{background:linear-gradient(135deg,#eb8fad,#df6289)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini{padding:18px 16px;min-height:116px;display:flex;align-items:center;gap:12px}.icon{width:54px;height:54px;flex:0 0 54px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#ffe7ef;color:#d9567e;font-size:26px}.mini .label{font-size:14px;font-weight:700;color:#625560}.mini .value{font-size:30px;font-weight:800;color:#d34270;margin-top:2px;font-variant-numeric:tabular-nums}.mini .value small{font-size:15px;color:#5b4d57}.mini .value.delta-down{color:var(--green)}.mini .value.delta-up{color:#d34270}.mini .value.delta-zero{color:#7f7180}
+.bmi-card{margin-top:14px;padding:18px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}.bmi-main .label{font-size:14px;font-weight:700;color:#625560}.bmi-main .value{font-size:34px;font-weight:800;color:#d34270;line-height:1.05;margin-top:2px}.badge{min-width:96px;text-align:center;border-radius:999px;padding:12px 16px;font-size:16px;font-weight:800;background:#e7f7f1;color:#25a97d}.badge.low{background:#eaf2ff;color:#4b7bb9}.badge.high{background:#fff0f2;color:#d15372}.bmi-note{font-size:12px;color:var(--muted);grid-column:2/4;margin-top:-4px}
+.menu{margin-top:14px;padding:0 18px}.menu button{width:100%;height:76px;border:0;background:transparent;display:grid;grid-template-columns:54px 1fr auto;align-items:center;text-align:left;border-bottom:1px solid var(--line);color:var(--text);font-size:18px;font-weight:700}.menu button:last-child{border-bottom:0}.chev{font-size:32px;color:#dc6389;font-weight:300}
+.bottom{position:absolute;left:0;right:0;bottom:0;height:74px;background:rgba(255,255,255,.94);border-top:1px solid #f0e3e8;display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:4}.nav{border:0;background:none;color:#8d808a;font-size:12px;padding-top:7px}.nav span{display:block;font-size:22px;line-height:1.15}.nav.active{color:#d54d76;font-weight:800}
+.title{font-size:23px;font-weight:800;margin:4px 0 14px}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.tab{border:0;border-radius:13px;padding:11px;background:#f0edf0;color:#756b74;font-weight:700}.tab.active{background:#df6289;color:white}.chart-wrap,.list-card,.settings-card,.edit-card{padding:16px}.chart-wrap svg{width:100%;height:300px;background:white;border-radius:20px}.row{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.edit-link{border:0;background:none;color:#d94f79;font-size:22px}.setting{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}.smallbtn{width:42px;height:42px;border:0;border-radius:50%;background:#ffe1eb;color:#d94f79;font-size:25px}.setting input{width:100px;font-size:20px;padding:8px;border:1px solid #eadde2;border-radius:12px;text-align:center}.edit-row{display:flex;justify-content:center;align-items:center;gap:12px;margin:22px 0}.edit-row input{width:120px;font-size:23px;padding:9px;text-align:center;border:1px solid #eadde2;border-radius:12px}.save,.danger{width:100%;padding:14px;border-radius:14px;font-size:16px;font-weight:800;margin-top:10px}.save{border:0;background:#d94f79;color:white}.danger{background:white;color:#d94f79;border:1px solid #d94f79}.date{font-size:14px;color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="app">
 <header id="head">体重管理</header>
 <main>
-<section id="home">
-<div class="card"><div class="label">目標体重</div><div class="goal"><span id="goalHome">58.0</span> kg</div></div>
-<div class="center">
-<div class="date" id="dateText"></div>
-<div class="big"><span id="weightHome">62.4</span><span style="font-size:24px"> kg</span></div>
-<div class="controls">
-<button class="circle" id="minus">−</button>
-<div class="hint">0.1kgずつ変更<br><span id="saved">自動保存</span></div>
-<button class="circle" id="plus">＋</button>
-</div>
-</div>
-<div class="card delta"><div class="label">目標まで</div><b id="delta"></b></div>
-<div class="card bmi"><div class="label">BMI</div><div id="bmiValue" class="bmi-value">--</div><div id="bmiRating" class="bmi-note">設定で身長を入力してください</div></div>
+<section id="home" class="screen">
+  <div class="card weight-card">
+    <div class="eyebrow">今日の体重</div>
+    <div class="weight"><span id="weightHome">52.3</span><small>kg</small></div>
+  </div>
+
+  <div class="adjust">
+    <button id="minus" aria-label="0.1kg減らす">−</button>
+    <button id="plus" aria-label="0.1kg増やす">＋</button>
+  </div>
+
+  <div class="info-grid">
+    <div class="card mini">
+      <div class="icon">⚑</div>
+      <div><div class="label">目標</div><div class="value"><span id="goalHome">50.0</span><small> kg</small></div></div>
+    </div>
+    <div class="card mini">
+      <div class="icon">▥</div>
+      <div><div class="label">前回比</div><div id="previousDelta" class="value delta-zero">--<small> kg</small></div></div>
+    </div>
+  </div>
+
+  <div class="card bmi-card">
+    <div class="icon">◔</div>
+    <div class="bmi-main"><div class="label">BMI</div><div id="bmiValue" class="value">--</div></div>
+    <div id="bmiRating" class="badge">--</div>
+    <div id="bmiNote" class="bmi-note">設定で身長を入力してください</div>
+  </div>
+
+  <div class="card menu">
+    <button id="openGraph"><span class="icon">↗</span><span>グラフを見る</span><span class="chev">›</span></button>
+    <button id="openHistory"><span class="icon">▤</span><span>過去の記録</span><span class="chev">›</span></button>
+  </div>
 </section>
 
-<section id="graph" class="hidden">
-<div class="tabs"><button class="tab active" data-days="7">1週間</button><button class="tab" data-days="30">1か月</button><button class="tab" data-days="365">1年</button></div>
-<svg id="chart" viewBox="0 0 360 260"></svg>
+<section id="graph" class="screen hidden">
+  <div class="title">グラフ</div>
+  <div class="tabs"><button class="tab active" data-days="7">1週間</button><button class="tab" data-days="30">1か月</button><button class="tab" data-days="365">1年</button></div>
+  <div class="card chart-wrap"><svg id="chart" viewBox="0 0 360 280"></svg></div>
 </section>
 
-<section id="history" class="hidden"><div class="title">過去の記録</div><div class="card" id="historyList"></div></section>
-
-<section id="settings" class="hidden">
-<div class="title">設定</div>
-<div class="card">
-<div class="setting"><span>目標体重</span><div><button class="smallbtn" id="gminus">−</button><strong style="margin:0 10px"><span id="goalSetting">58.0</span> kg</strong><button class="smallbtn" id="gplus">＋</button></div></div>
-<div class="setting"><span>身長</span><div><input id="heightInput" type="number" min="100" max="250" step="0.1" placeholder="未設定"> cm</div></div>
-</div>
+<section id="history" class="screen hidden">
+  <div class="title">過去の記録</div>
+  <div class="card list-card" id="historyList"></div>
 </section>
 
-<section id="editPage" class="hidden">
-<div class="title">体重の編集</div>
-<div class="card"><div class="date" id="editDate"></div><div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:22px 0"><button class="smallbtn" id="eminus">−</button><input id="editWeight" type="number" step="0.1"><button class="smallbtn" id="eplus">＋</button></div><button class="save" id="saveEdit">保存</button><button class="danger" id="deleteEdit">この記録を削除</button></div>
+<section id="settings" class="screen hidden">
+  <div class="title">設定</div>
+  <div class="card settings-card">
+    <div class="setting"><span>目標体重</span><div><button class="smallbtn" id="gminus">−</button><strong style="display:inline-block;min-width:88px;text-align:center"><span id="goalSetting">50.0</span> kg</strong><button class="smallbtn" id="gplus">＋</button></div></div>
+    <div class="setting"><span>身長</span><div><input id="heightInput" type="number" min="100" max="250" step="0.1" placeholder="未設定"> cm</div></div>
+  </div>
+</section>
+
+<section id="editPage" class="screen hidden">
+  <div class="title">体重の編集</div>
+  <div class="card edit-card">
+    <div class="date" id="editDate"></div>
+    <div class="edit-row"><button class="smallbtn" id="eminus">−</button><input id="editWeight" type="number" step="0.1"><button class="smallbtn" id="eplus">＋</button></div>
+    <button class="save" id="saveEdit">保存</button>
+    <button class="danger" id="deleteEdit">この記録を削除</button>
+  </div>
 </section>
 </main>
 
 <nav class="bottom">
-<button class="nav active" data-page="home"><span>⌂</span>ホーム</button>
-<button class="nav" data-page="graph"><span>▥</span>グラフ</button>
-<button class="nav" data-page="history"><span>▤</span>記録</button>
-<button class="nav" data-page="settings"><span>⚙︎</span>設定</button>
+  <button class="nav active" data-page="home"><span>⌂</span>ホーム</button>
+  <button class="nav" data-page="graph"><span>▥</span>グラフ</button>
+  <button class="nav" data-page="history"><span>▤</span>記録</button>
+  <button class="nav" data-page="settings"><span>⚙︎</span>設定</button>
 </nav>
 </div>
 <script>
-(()=>{const $=x=>document.getElementById(x),KEY='weightAppLive1';const today=new Date();today.setHours(0,0,0,0);const pad=n=>String(n).padStart(2,'0'),key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),todayKey=key(today);
-function seed(){const r={},v=[63.4,63.0,62.8,62.6,62.3,62.1,62.4];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);r[key(d)]=v[6-i]}return{goal:58,records:r,profile:{height:null}}}
-let data;try{data=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){data=seed()}if(!data.profile||typeof data.profile!=='object')data.profile={height:null};if(data.records[todayKey]==null)data.records[todayKey]=62.4;let days=7,editing=null;
+(()=>{
+const $=id=>document.getElementById(id),KEY='weightAppLive1';
+const today=new Date();today.setHours(0,0,0,0);const pad=n=>String(n).padStart(2,'0');const key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());const todayKey=key(today);
+function seed(){const r={},v=[52.9,52.7,52.6,52.5,52.4,52.5,52.3];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);r[key(d)]=v[6-i]}return{goal:50,records:r,profile:{height:null}}}
+let data;try{data=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){data=seed()}if(!data.profile||typeof data.profile!=='object')data.profile={height:null};if(!data.records||typeof data.records!=='object')data.records={};if(data.records[todayKey]==null)data.records[todayKey]=52.3;
+let days=7,editing=null;
 const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const w=()=>Number(data.records[todayKey]);
-function renderBMI(){const height=Number(data.profile.height),weight=w();if(!Number.isFinite(height)||height<100||height>250){bmiValue.textContent='--';bmiRating.className='bmi-note';bmiRating.textContent='設定で身長を入力してください';return}const bmi=weight/Math.pow(height/100,2);bmiValue.textContent=bmi.toFixed(1);bmiRating.className='bmi-rating';bmiRating.textContent=bmi<18.5?'低め':bmi<25?'普通':'高め'}
-function home(){weightHome.textContent=w().toFixed(1);goalHome.textContent=Number(data.goal).toFixed(1);goalSetting.textContent=Number(data.goal).toFixed(1);heightInput.value=data.profile.height??'';dateText.textContent=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';const d=w()-data.goal;delta.textContent=d>0?'あと '+d.toFixed(1)+' kg':d<0?'目標より '+Math.abs(d).toFixed(1)+' kg 少ない':'目標達成';renderBMI()}
-function change(step){data.records[todayKey]=Math.round((w()+step)*10)/10;persist();home();hist();draw()}
-function page(p){['home','graph','history','settings','editPage'].forEach(id=>$(id).classList.toggle('hidden',id!==p));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===p));head.textContent=p==='graph'?'グラフ':p==='history'?'記録':p==='settings'?'設定':p==='editPage'?'体重の編集':'体重管理';if(p==='graph')draw();if(p==='history')hist()}
-function hist(){const ks=Object.keys(data.records).sort().reverse();historyList.innerHTML=ks.map(k=>{const d=new Date(k+'T00:00:00');return '<div class="row"><span>'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日</span><span><strong>'+Number(data.records[k]).toFixed(1)+' kg</strong> <button class="edit" data-k="'+k+'">›</button></span></div>'}).join('');document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openEdit(b.dataset.k))}
-function openEdit(k){editing=k;const d=new Date(k+'T00:00:00');editDate.textContent=d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';editWeight.value=Number(data.records[k]).toFixed(1);page('editPage')}
-function draw(){const cutoff=new Date(today);cutoff.setDate(cutoff.getDate()-(days-1));const pts=Object.entries(data.records).map(([k,v])=>({d:new Date(k+'T00:00:00'),v:Number(v)})).filter(p=>p.d>=cutoff).sort((a,b)=>a.d-b.d);if(!pts.length){chart.innerHTML='<text x="180" y="130" text-anchor="middle">記録がありません</text>';return}const W=360,H=260,L=42,R=16,T=20,B=36,vals=pts.map(p=>p.v).concat([Number(data.goal)]);let mn=Math.floor(Math.min(...vals)-1),mx=Math.ceil(Math.max(...vals)+1);if(mx-mn<4)mx=mn+4;const x=i=>L+(W-L-R)*(pts.length===1?.5:i/(pts.length-1)),y=v=>T+(H-T-B)*(mx-v)/(mx-mn);let s='';for(let n=mn;n<=mx;n++){const yy=y(n);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="#eef1f5"/><text x="'+(L-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="#8892a5">'+n+'</text>'}const gy=y(Number(data.goal));s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy+'" y2="'+gy+'" stroke="#ff5f8d" stroke-dasharray="6 5"/>';s+='<path d="'+pts.map((p,i)=>(i?'L':'M')+' '+x(i)+' '+y(p.v)).join(' ')+'" fill="none" stroke="#ff6b94" stroke-width="3"/>';pts.forEach((p,i)=>s+='<circle cx="'+x(i)+'" cy="'+y(p.v)+'" r="4" fill="#ff6b94"/>');chart.innerHTML=s}
-const bindHold=(el,fn)=>{el.addEventListener('pointerdown',e=>{e.preventDefault();fn()},{passive:false});};
-bindHold(minus,()=>change(-.1));bindHold(plus,()=>change(.1));gminus.onclick=()=>{data.goal=Math.round((data.goal-.1)*10)/10;persist();home();draw()};gplus.onclick=()=>{data.goal=Math.round((data.goal+.1)*10)/10;persist();home();draw()};heightInput.onchange=()=>{const h=Number(heightInput.value);data.profile.height=Number.isFinite(h)&&h>=100&&h<=250?h:null;persist();home()};eminus.onclick=()=>editWeight.value=(Math.round((Number(editWeight.value)-.1)*10)/10).toFixed(1);eplus.onclick=()=>editWeight.value=(Math.round((Number(editWeight.value)+.1)*10)/10).toFixed(1);saveEdit.onclick=()=>{if(!editing)return;data.records[editing]=Math.round(Number(editWeight.value)*10)/10;persist();home();page('history')};deleteEdit.onclick=()=>{if(editing&&confirm('この記録を削除しますか？')){delete data.records[editing];if(editing===todayKey)data.records[todayKey]=62.4;persist();home();page('history')}};document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>page(b.dataset.page));document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{days=Number(b.dataset.days);document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));draw()});persist();home();hist();draw()})();
+function previousValue(){const keys=Object.keys(data.records).filter(k=>k<todayKey&&Number.isFinite(Number(data.records[k]))).sort();if(!keys.length)return null;return Number(data.records[keys[keys.length-1]])}
+function renderPrevious(){const prev=previousValue();const el=$('previousDelta');if(prev==null){el.className='value delta-zero';el.innerHTML='--<small> kg</small>';return}const diff=Math.round((w()-prev)*10)/10;const sign=diff>0?'+':'';el.className='value '+(diff<0?'delta-down':diff>0?'delta-up':'delta-zero');el.innerHTML=sign+diff.toFixed(1)+'<small> kg</small>'}
+function renderBMI(){const height=Number(data.profile.height),weight=w();const value=$('bmiValue'),rating=$('bmiRating'),note=$('bmiNote');if(!Number.isFinite(height)||height<100||height>250){value.textContent='--';rating.textContent='--';rating.className='badge';note.textContent='設定で身長を入力してください';return}const bmi=weight/Math.pow(height/100,2);value.textContent=bmi.toFixed(1);note.textContent='';if(bmi<18.5){rating.textContent='低め';rating.className='badge low'}else if(bmi<25){rating.textContent='普通';rating.className='badge'}else{rating.textContent='高め';rating.className='badge high'}}
+function home(){ $('weightHome').textContent=w().toFixed(1);$('goalHome').textContent=Number(data.goal).toFixed(1);$('goalSetting').textContent=Number(data.goal).toFixed(1);$('heightInput').value=data.profile.height??'';renderPrevious();renderBMI() }
+function change(step){data.records[todayKey]=Math.max(20,Math.min(300,Math.round((w()+step)*10)/10));persist();home();hist();draw()}
+function page(p){['home','graph','history','settings','editPage'].forEach(id=>$(id).classList.toggle('hidden',id!==p));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===p));$('head').textContent=p==='home'?'体重管理':p==='graph'?'グラフ':p==='history'?'記録':p==='settings'?'設定':'体重の編集';if(p==='graph')draw();if(p==='history')hist()}
+function hist(){const ks=Object.keys(data.records).sort().reverse();$('historyList').innerHTML=ks.map(k=>{const d=new Date(k+'T00:00:00');return '<div class="row"><span>'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日</span><span><strong>'+Number(data.records[k]).toFixed(1)+' kg</strong> <button class="edit-link" data-k="'+k+'">›</button></span></div>'}).join('')||'<div style="padding:10px;text-align:center;color:#877985">記録がありません</div>';document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openEdit(b.dataset.k))}
+function openEdit(k){editing=k;const d=new Date(k+'T00:00:00');$('editDate').textContent=d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';$('editWeight').value=Number(data.records[k]).toFixed(1);page('editPage')}
+function draw(){const cutoff=new Date(today);cutoff.setDate(cutoff.getDate()-(days-1));const pts=Object.entries(data.records).map(([k,v])=>({d:new Date(k+'T00:00:00'),v:Number(v)})).filter(p=>p.d>=cutoff&&p.d<=today&&Number.isFinite(p.v)).sort((a,b)=>a.d-b.d);const svg=$('chart');if(!pts.length){svg.innerHTML='<text x="180" y="140" text-anchor="middle" fill="#877985">記録がありません</text>';return}const W=360,H=280,L=42,R=18,T=24,B=42,vals=pts.map(p=>p.v).concat([Number(data.goal)]);let mn=Math.floor(Math.min(...vals)-1),mx=Math.ceil(Math.max(...vals)+1);if(mx-mn<4)mx=mn+4;const x=i=>L+(W-L-R)*(pts.length===1?.5:i/(pts.length-1)),y=v=>T+(H-T-B)*(mx-v)/(mx-mn);let s='';for(let n=mn;n<=mx;n++){const yy=y(n);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="#f0edf0"/><text x="'+(L-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="#9a8d96">'+n+'</text>'}const gy=y(Number(data.goal));s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+gy+'" y2="'+gy+'" stroke="#d94f79" stroke-dasharray="6 5"/>';s+='<path d="'+pts.map((p,i)=>(i?'L':'M')+' '+x(i)+' '+y(p.v)).join(' ')+'" fill="none" stroke="#e36e93" stroke-width="3"/>';pts.forEach((p,i)=>s+='<circle cx="'+x(i)+'" cy="'+y(p.v)+'" r="4" fill="#d94f79"/>');svg.innerHTML=s}
+function holdButton(id,step){const btn=$(id);let t=null,i=null;const stop=()=>{clearTimeout(t);clearInterval(i);t=i=null};btn.addEventListener('pointerdown',e=>{e.preventDefault();change(step);t=setTimeout(()=>i=setInterval(()=>change(step),130),420)});btn.addEventListener('pointerup',stop);btn.addEventListener('pointercancel',stop);btn.addEventListener('pointerleave',stop)}
+holdButton('minus',-.1);holdButton('plus',.1);
+$('openGraph').onclick=()=>page('graph');$('openHistory').onclick=()=>page('history');
+$('gminus').onclick=()=>{data.goal=Math.max(20,Math.round((Number(data.goal)-.1)*10)/10);persist();home();draw()};$('gplus').onclick=()=>{data.goal=Math.min(300,Math.round((Number(data.goal)+.1)*10)/10);persist();home();draw()};$('heightInput').onchange=()=>{const h=Number($('heightInput').value);data.profile.height=Number.isFinite(h)&&h>=100&&h<=250?h:null;persist();home()};
+$('eminus').onclick=()=>{$('editWeight').value=(Math.round((Number($('editWeight').value)-.1)*10)/10).toFixed(1)};$('eplus').onclick=()=>{$('editWeight').value=(Math.round((Number($('editWeight').value)+.1)*10)/10).toFixed(1)};$('saveEdit').onclick=()=>{if(!editing)return;data.records[editing]=Math.round(Number($('editWeight').value)*10)/10;persist();home();page('history')};$('deleteEdit').onclick=()=>{if(editing&&confirm('この記録を削除しますか？')){delete data.records[editing];persist();home();page('history')}};
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>page(b.dataset.page));document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{days=Number(b.dataset.days);document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));draw()});
+persist();home();hist();draw();
+})();
 </script>
 </body>
 </html>
